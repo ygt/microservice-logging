@@ -1,5 +1,3 @@
-uuid = require 'node-uuid'
-
 EVENT_TYPES =
   # business event types
   hold: 'hold'
