@@ -15,6 +15,18 @@ The logging library is provided in a number of language formats:
 
 # Design considerations
 
+The design goals of this library were:
+* Write logs as JSON
+* One line per log entry
+* One JSON object per log entry
+* Each log entry contains a severity[1]
+* Each log entry contains an ISO8601 UTC timestamp
+* Each log entry contains the name of the service that wrote it
+* Each log entry pertains to an 'event'
+* Stack traces are written inside a single JSON log object rather than sprawling over several lines
+
+[1] It turns out that there isn't a single authoriative standard for severity levels, we chose to go with DEBUG, INFO, WARNING, ERROR and CRITICAL as our choices. Sometimes people use FATAL, or even EMERGENCY, but we're fairly certain that we don't need anything of a higher priority than CRITICAL. Your mileage may vary, so we made it trivially configurable. 
+
 Much of the work that led to this library was inspired by the book [I <3 Logs](http://www.goodreads.com/book/show/23237460-i-heart-logs) by LinkedIn principle engineer Jay Kreps. The decision to produce a consistent JSON-based logging format that could be then used with analytics lead us to a Google StackDriver logging format that looks something like:
 ```
 {
