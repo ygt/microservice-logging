@@ -2,7 +2,7 @@
 class JsonLogger
   # Why an inner class???
   class JsonEventLogger
-    SERVICE_NAME = 'tigger'.freeze
+    SERVICE_NAME = 'rainbow-dash'.freeze
 
     private_constant :SERVICE_NAME
 

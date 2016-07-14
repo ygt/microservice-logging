@@ -1,13 +1,5 @@
 source 'https://rubygems.org'
 
 group :development, :test do
-  # gem 'rack-test'
   gem 'rspec'
-  # gem 'listen'
-  # gem 'guard-rspec', require: false
-  # gem 'guard-rubocop', require: false
-  # gem 'guard-yield', require: false
-  # gem 'pry'
-  # gem 'nokogiri'
-  # gem 'sinatra-contrib'
 end

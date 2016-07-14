@@ -39,7 +39,7 @@ class JsonLogger
 
   EVENT_TYPES = [
     :http_request,
-    :piglet,
+    :applejack,
     :startup,
     :exception
   ].freeze

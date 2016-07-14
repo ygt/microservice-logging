@@ -1,8 +1,5 @@
-# require 'spec_helper'
 require 'json'
 require 'stringio'
-
-# require 'clock'
 require './json_logger'
 
 RSpec.describe JsonLogger do
@@ -18,7 +15,7 @@ RSpec.describe JsonLogger do
   context 'event types' do
     let(:log_severities) { [:debug, :info, :warning, :error, :critical] }
 
-    [:http_request, :piglet, :startup, :exception].each do |event_type|
+    [:http_request, :applejack, :startup, :exception].each do |event_type|
       it "supports #{event_type}" do
         log_severities.each do |severity|
           expect(subject.public_send(event_type)).to respond_to(severity)
@@ -36,7 +33,7 @@ RSpec.describe JsonLogger do
 
     contents = JSON.parse(output.string)
     expect(contents).to eq(
-      'service' => 'tigger',
+      'service' => 'rainbow-dash',
       'timestamp' => '2016-02-17T12:34:56.789Z',
       'event_type' => 'startup',
       'severity' => 'INFO'
@@ -79,7 +76,8 @@ RSpec.describe JsonLogger do
 
     contents = JSON.parse(output.string)
     expect(contents)
-      .to include(scoped_properties).and(include(extra_properties))
+      .to include(scoped_properties)
+      .and(include(extra_properties))
   end
 
   it 'should accept DEBUG as a severity' do
@@ -129,5 +127,28 @@ RSpec.describe JsonLogger do
 
     contents = JSON.parse(output.string)
     expect(contents).to include('message' => '1970-06-12 00:00:00 UTC')
+  end
+
+  # Currently this is really more of a demonstration of how to use
+  # the functionality, rather than an actual test. Further help
+  # could be built into the library to format error objects.
+  it 'writes a multi-line stack trace into a single log entry' do
+    def will_throw
+      1 / 0
+    end
+    begin
+      will_throw()
+    rescue => bang
+      extra_properties = {
+        'error' => bang.class.to_s,
+        'stacktrace' => bang.backtrace
+      }
+      subject.startup.critical(extra_properties)
+      
+      contents = JSON.parse(output.string)
+      expect(contents).to include('error' => 'ZeroDivisionError')
+      expect(contents['stacktrace']).to be_a(Array)
+      expect(contents['stacktrace'][0]).to start_with('/var/app/json_logger_spec')
+    end
   end
 end
