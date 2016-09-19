@@ -25,9 +25,10 @@ The design goals of this library were:
 * Each log entry pertains to an 'event'
 * Stack traces are written inside a single JSON log object rather than sprawling over several lines
 
-[1] It turns out that there isn't a single authoriative standard for severity levels, we chose to go with DEBUG, INFO, WARNING, ERROR and CRITICAL as our choices. Sometimes people use FATAL, or even EMERGENCY, but we're fairly certain that we don't need anything of a higher priority than CRITICAL. Your mileage may vary, so we made it trivially configurable. 
+[1] It turns out that there isn't a single authoriative standard for severity levels, we chose to go with DEBUG, INFO, WARNING, ERROR and CRITICAL as our choices. Sometimes people use FATAL, or even EMERGENCY, but we're fairly certain that we don't need anything of a higher priority than CRITICAL. Your mileage may vary, so we made it trivially configurable.
 
 Much of the work that led to this library was inspired by the book [I <3 Logs](http://www.goodreads.com/book/show/23237460-i-heart-logs) by LinkedIn principle engineer Jay Kreps. The decision to produce a consistent JSON-based logging format that could be then used with analytics lead us to a Google StackDriver logging format that looks something like:
+
 ```
 {
   "metadata": {
@@ -37,7 +38,7 @@ Much of the work that led to this library was inspired by the book [I <3 Logs](h
     "zone": "europe-west1-b",
     "labels": {
       "container.googleapis.com/cluster_name": "MLP",
-      "compute.googleapis.com/resource_type": "instance",     
+      "compute.googleapis.com/resource_type": "instance",
       "compute.googleapis.com/resource_name": "fluentd-cloud-logging-gke-mlp-29fed122-node-xpt9",
       "container.googleapis.com/instance_id": "3044771269853068901",
       "container.googleapis.com/pod_name": "rainbow-dash-658671670-qlm1i",
@@ -70,9 +71,9 @@ Much of the work that led to this library was inspired by the book [I <3 Logs](h
         {
           "courseId": "27182-818-2845904523",
           "pax": 2,
-          "timeId": "44005-204-0000000001:1102021240060606131610180005000000",   
+          "timeId": "44005-204-0000000001:1102021240060606131610180005000000",
           "reservationId": "27182-818-0002890451",
-          "date": "2016-10-18T00:00:00.000Z"      
+          "date": "2016-10-18T00:00:00.000Z"
         }
       ],
       "sessionId": "14142-300-0000995250",
@@ -81,11 +82,13 @@ Much of the work that led to this library was inspired by the book [I <3 Logs](h
   }
 }
 ```
-The logs in StackDriver are divided into two sections, the first of these - 'metadata' - is provided by the platform, this includes the severity: 'INFO' in this case; and the location of the source of the log: a Docker service running on a GKE cluster.  
+
+The logs in StackDriver are divided into two sections, the first of these - 'metadata' - is provided by the platform, this includes the severity: 'INFO' in this case; and the location of the source of the log: a Docker service running on a GKE cluster.
 
 The application's part of the log StackDriver refers to as the 'structPayload' - for this we decided on certain constant attributes (event_type, user, service, timestamp, correlation_id) and we then augment them with other attributes that are entirely event specific e.g. booking details.
 
 Although your logs are probably not using StackDriver, the format of your logs will probably look somewhat similar - there will be some universal things that you want: the severity, the timestamp, the name of the service that produced the log, etc. together with some log event specific data that cannot be determined in advance.
 
 # LICENSE
+
 This work is licensed under the MIT license - see the [LICENSE](LICENSE) file for further details.

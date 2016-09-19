@@ -1,22 +1,11 @@
-EVENT_TYPES =
-  # business event types
-  hold: 'hold'
-  release: 'release'
-  booking: 'booking'
-  # infrastructural event types
-  conceptRequest: 'concept_request'
-  httpRequest: 'http_request'
-  startup: 'startup'
-  exception: 'exception'
-
 class Logger
-  constructor: (@dependencies, @scoped_properties) ->
-    EventLogger = makeEventLogger(@dependencies, @scoped_properties)
-    for name, event_type of EVENT_TYPES
+  constructor: (@configuration, @scoped_properties) ->
+    EventLogger = makeEventLogger(@configuration, @scoped_properties)
+    for name, event_type of @configuration.events
       @[name] = new EventLogger(event_type)
 
   with: (scoped_properties) ->
-    new Logger(@dependencies, Object.assign({}, @scoped_properties, scoped_properties))
+    new Logger(@configuration, Object.assign({}, @scoped_properties, scoped_properties))
 
 makeEventLogger = ({now, output}, scoped_properties) -> class
   constructor: (@type) ->
