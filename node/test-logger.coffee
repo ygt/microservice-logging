@@ -28,7 +28,6 @@ describe 'logging', ->
 
     contents = fromLogMessage(@output.log)
 
-    expect(contents).to.have.property 'service', 'default_service_name'
     expect(contents).to.have.property 'timestamp', '2016-02-15T12:34:56.789Z'
     expect(contents).to.have.property 'event_type', 'exception'
     expect(contents).to.have.property 'severity', 'ERROR'
@@ -50,6 +49,7 @@ describe 'logging', ->
 
   it 'can be scoped with specific properties', ->
     scoped_properties =
+      service: 'object creation factory maker'
       something: 'shiny'
     extra_properties =
       foo: 'bar'
@@ -59,6 +59,7 @@ describe 'logging', ->
 
     contents = fromLogMessage(@output.log)
 
+    expect(contents).to.have.property 'service', 'object creation factory maker'
     expect(contents).to.have.property 'something', 'shiny'
     expect(contents).to.have.property 'foo', 'bar'
 

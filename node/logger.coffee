@@ -17,7 +17,6 @@ makeEventLogger = ({now, output}, scoped_properties) -> class
 
   output_log = (severity) -> (extra_properties) ->
     default_properties =
-      service: 'default_service_name' # TODO: should probably remove this?
       timestamp: now()
       event_type: @type
       severity: severity
