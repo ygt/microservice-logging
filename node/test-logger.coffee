@@ -17,15 +17,19 @@ describe 'logging', ->
     @log = new Logger
       now: => @timestamp
       output: @output
+      events: {
+        'startup': 'startup'
+        'exception': 'exception'
+        'lunchtime': 'lunch time'
+      }
 
   it 'should log all required components', ->
-    @log.httpRequest.error()
+    @log.exception.error()
 
     contents = fromLogMessage(@output.log)
 
-    expect(contents).to.have.property 'service', 'default_service_name'
     expect(contents).to.have.property 'timestamp', '2016-02-15T12:34:56.789Z'
-    expect(contents).to.have.property 'event_type', 'http_request'
+    expect(contents).to.have.property 'event_type', 'exception'
     expect(contents).to.have.property 'severity', 'ERROR'
 
   it 'should pass on all properties that are passed in', ->
@@ -35,25 +39,27 @@ describe 'logging', ->
         method: 'GET'
       response:
         status: 200
-    @log.httpRequest.error extra_properties
+    @log.exception.error extra_properties
 
     contents = fromLogMessage(@output.log)
 
     expect(contents.correlation_id).to.equal '126bb6fa-28a2-470f-b013-eefbf9182b2d'
     expect(contents.request.method).to.equal 'GET'
     expect(contents.response.status).to.equal 200
-    
+
   it 'can be scoped with specific properties', ->
     scoped_properties =
+      service: 'object creation factory maker'
       something: 'shiny'
     extra_properties =
       foo: 'bar'
 
     log = @log.with(scoped_properties)
-    log.httpRequest.error extra_properties
+    log.lunchtime.error extra_properties
 
     contents = fromLogMessage(@output.log)
 
+    expect(contents).to.have.property 'service', 'object creation factory maker'
     expect(contents).to.have.property 'something', 'shiny'
     expect(contents).to.have.property 'foo', 'bar'
 
@@ -66,7 +72,7 @@ describe 'logging', ->
       soup: 'laksa'
 
     log = @log.with(scoped_properties).with(additional_scoped_properties)
-    log.httpRequest.error extra_properties
+    log.lunchtime.error extra_properties
 
     contents = fromLogMessage(@output.log)
 
@@ -84,7 +90,7 @@ describe 'logging', ->
 
     log = @log.with(scoped_properties)
     rescoped_log = log.with(additional_scoped_properties)
-    log.httpRequest.error extra_properties
+    log.lunchtime.error extra_properties
 
     contents = fromLogMessage(@output.log)
 
@@ -101,7 +107,7 @@ describe 'logging', ->
 
   ['debug', 'info', 'warning', 'error', 'critical'].forEach (severity) ->
     it "should accept #{severity} as a severity", ->
-      @log.httpRequest[severity]()
+      @log.startup[severity]()
 
       contents = fromLogMessage(@output.log)
 
