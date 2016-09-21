@@ -5,16 +5,21 @@ const log = new Logger({
   output: console,
   events: {
     startup: 'startup',
-    httpRequest: 'HTTP request'
+    httpRequest: 'HTTP request',
+    database: 'database'
   }
 }).with({service: 'my super service'})
 
-log.startup.error({
-  message: "Emergency! There's an Emergency going on"
+log.startup.info({
+  message: 'Ready to go.',
+  port: 8080
 })
 
 const requestLog = log.with({correlation_id: '126bb6fa-28a2-470f-b013-eefbf9182b2d'})
+requestLog.database.error({
+  message: 'Connection failed.'
+})
 requestLog.httpRequest.info({
   request: {method: 'GET'},
-  response: {status: 200}
+  response: {status: 500}
 })
