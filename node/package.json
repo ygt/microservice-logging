@@ -1,11 +1,10 @@
 {
   "name": "microservice-logging",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A simple JSON-logging library for Microservices",
-  "main": "lib/logger.js",
+  "main": "logger.js",
   "scripts": {
-    "test": "mocha -R nyan --compilers coffee:coffee-script/register test-logger.coffee",
-    "prepublish": "coffee -c -o lib logger.coffee"
+    "test": "mocha test-logger.js && standard"
   },
   "repository": {
     "type": "git",
@@ -35,11 +34,10 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "coffee-script": "^1.10.0",
     "mocha": "^2.5.3",
     "moment": "^2.14.1",
     "node-uuid": "^1.4.7",
     "sinon": "^1.17.4",
-    "testdouble": "^1.4.3"
+    "standard": "^8.1.0"
   }
 }
