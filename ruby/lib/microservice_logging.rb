@@ -1,10 +1,10 @@
 require 'json'
 require 'time'
 
-require './json_event_logger'
+require_relative './json_event_logger'
 
 # Log all the things in JSON
-class JsonLogger
+class MicroserviceLogger
   def initialize(clock, output, scoped_properties = {})
     @clock = clock
     @output = output
@@ -13,7 +13,7 @@ class JsonLogger
   end
 
   def with(scoped_properties)
-    JsonLogger.new(@clock, @output, scoped_properties)
+    MicroserviceLogger.new(@clock, @output, scoped_properties)
   end
 
   # The fields 'event_type' and 'serverity' in the JSON output that is logged

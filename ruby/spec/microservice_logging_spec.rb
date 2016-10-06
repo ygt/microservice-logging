@@ -1,12 +1,12 @@
 require 'json'
 require 'stringio'
-require './json_logger'
+require_relative '../lib/microservice_logging'
 
-RSpec.describe JsonLogger do
+RSpec.describe MicroserviceLogger do
   let(:a_time) { Time.now }
   let(:clock) { class_double(Time) }
   let(:output) { StringIO.new }
-  subject { JsonLogger.new(clock, output) }
+  subject { MicroserviceLogger.new(clock, output) }
 
   before do
     allow(clock).to receive(:now).and_return(a_time)
@@ -137,18 +137,19 @@ RSpec.describe JsonLogger do
       1 / 0
     end
     begin
-      will_throw()
+      will_throw
     rescue => bang
       extra_properties = {
         'error' => bang.class.to_s,
         'stacktrace' => bang.backtrace
       }
       subject.startup.critical(extra_properties)
-      
+
       contents = JSON.parse(output.string)
       expect(contents).to include('error' => 'ZeroDivisionError')
       expect(contents['stacktrace']).to be_a(Array)
-      expect(contents['stacktrace'][0]).to start_with('/var/app/json_logger_spec')
+      expect(contents['stacktrace'][0])
+        .to start_with('/var/app/spec/microservice_logging_spec')
     end
   end
 end

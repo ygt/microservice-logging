@@ -8,7 +8,7 @@ test:
 	-it --rm \
 	-v `pwd`:/var/app \
 	ygt/microservice-logging-ruby \
-	rspec --format documentation json_logger_spec.rb
+	rspec --format documentation spec
 
 lint:
 	docker run -it --rm -v `pwd`:/var/app ygt/microservice-logging-ruby rubocop
