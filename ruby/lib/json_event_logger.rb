@@ -1,12 +1,12 @@
 # A machine-readable first, human-readable second logging library
 class MicroserviceLogger
-  # Why an inner class???
   class JsonEventLogger
-    SERVICE_NAME = 'rainbow-dash'.freeze
-
-    private_constant :SERVICE_NAME
-
-    def initialize(clock, output, scoped_properties, event_type)
+    def initialize(service_name:,
+                   clock:,
+                   output:,
+                   scoped_properties:,
+                   event_type:)
+      @service_name = service_name
       @clock = clock
       @output = output
       @scoped_properties = scoped_properties
@@ -46,7 +46,7 @@ class MicroserviceLogger
 
     def required_properties(severity)
       {
-        service: SERVICE_NAME,
+        service: @service_name,
         event_type: @event_type,
         timestamp: @clock.now.utc.iso8601(3),
         severity: severity

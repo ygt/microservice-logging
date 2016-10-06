@@ -6,7 +6,9 @@ RSpec.describe MicroserviceLogger do
   let(:a_time) { Time.now }
   let(:clock) { class_double(Time) }
   let(:output) { StringIO.new }
-  subject { MicroserviceLogger.new(clock, output) }
+  subject { MicroserviceLogger.new(:service_name => 'rainbow-dash',
+                                   :clock => clock,
+                                   :output => output )}
 
   before do
     allow(clock).to receive(:now).and_return(a_time)
