@@ -5,12 +5,33 @@ require_relative './json_event_logger'
 
 # Log all the things in JSON
 class MicroserviceLogger
-  def initialize(clock, output, scoped_properties = {})
+  def initialize(clock,
+                 output,
+                 scoped_properties = {},
+                 events = DEFAULT_EVENT_TYPES)
     @clock = clock
     @output = output
     @scoped_properties = scoped_properties
     @event_loggers = {}
+    @events = events
+    @events.each do |method_name|
+      event_type = method_name.to_s
+      @event_loggers[method_name] =
+        JsonEventLogger.new(@clock, @output, @scoped_properties, event_type)
+    end
   end
+
+  def method_missing(event)
+    super unless @events.include? event
+    @event_loggers[event]
+  end
+
+  DEFAULT_EVENT_TYPES = [
+    :http_request,
+    :applejack,
+    :startup,
+    :exception
+  ].freeze
 
   def with(scoped_properties)
     MicroserviceLogger.new(@clock, @output, scoped_properties)
@@ -36,21 +57,4 @@ class MicroserviceLogger
   #
   # Each of them returns a private JsonEventLogger that in turn has the methods
   # corresponding to the severity levels.
-
-  EVENT_TYPES = [
-    :http_request,
-    :applejack,
-    :startup,
-    :exception
-  ].freeze
-
-  private_constant :EVENT_TYPES
-
-  EVENT_TYPES.each do |method_name|
-    event_type = method_name.to_s
-    define_method(method_name) do
-      @event_loggers[method_name] ||=
-        JsonEventLogger.new(@clock, @output, @scoped_properties, event_type)
-    end
-  end
 end
