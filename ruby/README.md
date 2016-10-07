@@ -4,7 +4,7 @@ This library provides a minimal JSON logging interface suitable for use in micro
 
 ## Install
 
-	gem install microservice-logging
+	gem install microservice_logging
 
 ## Examples of use
 
