@@ -4,14 +4,14 @@ This is a machine-readable first, human-readable second, JSON-based logging micr
 
 The logging library is provided in a number of language formats:
 * [Node.js](node)
-  - CoffeeScript
   - JavaScript ES6
-  - JavaScript ES5
   - For more details see the Node-specific [README](node/README.md)
 * [Ruby](ruby)
+  - For more details see the Ruby-specific [README](ruby/README.md)
 * [Elixir](elixir)
+  - currently just a placeholder
 * [Go](go)
-* More to follow...
+  - currently just a placeholder
 
 # Design considerations
 
