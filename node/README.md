@@ -8,7 +8,7 @@ This library provides a minimal JSON logging interface suitable for use in micro
 
 ## Examples of use
 
-All of the following code can be found [here](node/example-app.js)
+All of the following code can be found [here](example-app.js)
 
 Instantiate a new logger like this:
 
