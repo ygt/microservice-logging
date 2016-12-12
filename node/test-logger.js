@@ -14,7 +14,7 @@ const fromLogMessage = function (output, {atIndex = 0} = {}) {
 describe('logging', function () {
   beforeEach(function () {
     this.timestamp = moment.utc('2016-02-15T12:34:56.789Z')
-    this.output = {log: sinon.spy()}
+    this.output = sinon.spy()
     this.log = new Logger({
       now: () => this.timestamp,
       output: this.output,
@@ -29,7 +29,7 @@ describe('logging', function () {
   it('should log all required components', function () {
     this.log.exception.error()
 
-    const contents = fromLogMessage(this.output.log)
+    const contents = fromLogMessage(this.output)
 
     expect(contents).to.have.property('timestamp', '2016-02-15T12:34:56.789Z')
     expect(contents).to.have.property('event_type', 'exception')
@@ -48,7 +48,7 @@ describe('logging', function () {
     }
     this.log.exception.error(extraProperties)
 
-    const contents = fromLogMessage(this.output.log)
+    const contents = fromLogMessage(this.output)
 
     expect(contents.correlation_id).to.equal('126bb6fa-28a2-470f-b013-eefbf9182b2d')
     expect(contents.request.method).to.equal('GET')
@@ -67,7 +67,7 @@ describe('logging', function () {
     const log = this.log.with(scopedProperties)
     log.lunchtime.error(extraProperties)
 
-    const contents = fromLogMessage(this.output.log)
+    const contents = fromLogMessage(this.output)
 
     expect(contents).to.have.property('service', 'object creation factory maker')
     expect(contents).to.have.property('something', 'shiny')
@@ -88,7 +88,7 @@ describe('logging', function () {
     const log = this.log.with(scopedProperties).with(additionalScopedProperties)
     log.lunchtime.error(extraProperties)
 
-    const contents = fromLogMessage(this.output.log)
+    const contents = fromLogMessage(this.output)
 
     expect(contents).to.have.property('beverage', 'orange soda')
     expect(contents).to.have.property('sandwich', 'noodle')
@@ -111,7 +111,7 @@ describe('logging', function () {
 
     log.lunchtime.error(extraProperties)
 
-    const contents = fromLogMessage(this.output.log)
+    const contents = fromLogMessage(this.output)
 
     expect(contents).to.not.have.property('dog')
     expect(contents).to.have.property('cat', 'ginger')
@@ -121,7 +121,7 @@ describe('logging', function () {
   it('converts strings into an object', function () {
     this.log.startup.info('Hello!')
 
-    const contents = fromLogMessage(this.output.log)
+    const contents = fromLogMessage(this.output)
 
     expect(contents).to.have.property('message', 'Hello!')
   })
@@ -130,7 +130,7 @@ describe('logging', function () {
     it(`should accept ${severity} as a severity`, function () {
       this.log.startup[severity]()
 
-      const contents = fromLogMessage(this.output.log)
+      const contents = fromLogMessage(this.output)
 
       expect(contents).to.have.property('severity')
         .that.equals(severity.toUpperCase())

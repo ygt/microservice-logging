@@ -29,7 +29,7 @@ const makeEventLogger = ({now, output}, scopedProperties) => {
     }
 
     const allProperties = Object.assign({}, defaultProperties, scopedProperties, extraProperties)
-    output.log(JSON.stringify(allProperties))
+    output(JSON.stringify(allProperties))
   }
 
   return class {
