@@ -1,11 +1,19 @@
 class Logger {
   constructor (configuration, scopedProperties) {
+    const {now, output, events} = configuration
     this.configuration = configuration
+    this.now = now
+    if (output.log) {
+      this.output = output.log.bind(output)
+    } else {
+      this.output = output
+    }
+    this.events = events
     this.scopedProperties = scopedProperties
 
-    const EventLogger = makeEventLogger(this.configuration, this.scopedProperties)
-    for (let name in this.configuration.events) {
-      const eventType = this.configuration.events[name]
+    const EventLogger = makeEventLogger({now: this.now, output: this.output}, this.scopedProperties)
+    for (let name in events) {
+      const eventType = events[name]
       this[name] = new EventLogger(eventType)
     }
   }

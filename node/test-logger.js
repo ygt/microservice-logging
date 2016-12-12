@@ -136,4 +136,33 @@ describe('logging', function () {
         .that.equals(severity.toUpperCase())
     })
   })
+
+  it('allows just passing `console` too, for backwards compatibility', function () {
+    const fakeConsole = new FakeConsole(this.output)
+    const log = new Logger({
+      now: () => this.timestamp,
+      output: fakeConsole,
+      events: {
+        'startup': 'startup',
+        'exception': 'exception',
+        'lunchtime': 'lunch time'
+      }
+    })
+
+    log.exception.info({foo: 'bar'})
+
+    const contents = fromLogMessage(this.output)
+
+    expect(contents).to.have.property('foo', 'bar')
+  })
+
+  class FakeConsole {
+    constructor (output) {
+      this.output = output
+    }
+
+    log (...args) {
+      this.output(...args)
+    }
+  }
 })
