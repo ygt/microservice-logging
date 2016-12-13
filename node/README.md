@@ -16,7 +16,7 @@ Instantiate a new logger like this:
 
     const log = new Logger({
       now: Date.now,
-      output: console,
+      output: console.log,
       events: {
         startup: 'startup',
         exception: 'exception',
