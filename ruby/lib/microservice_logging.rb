@@ -17,9 +17,13 @@ class MicroserviceLogger
     @events = events
   end
 
-  def method_missing(event)
-    super unless @events.include? event
-    @event_loggers[event]
+  def method_missing(event_or_method_name)
+    super unless respond_to_missing?(event_or_method_name)
+    event_loggers.fetch(event_or_method_name)
+  end
+
+  def respond_to_missing?(event_or_method_name)
+    @events.include?(event_or_method_name)
   end
 
   DEFAULT_EVENT_TYPES = [
