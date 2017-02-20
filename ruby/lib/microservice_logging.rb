@@ -14,17 +14,7 @@ class MicroserviceLogger
     @clock = clock
     @output = output
     @scoped_properties = scoped_properties
-    @event_loggers = {}
     @events = events
-    @events.each do |method_name|
-      event_type = method_name.to_s
-      @event_loggers[method_name] =
-        JsonEventLogger.new(service_name: @service_name,
-                            clock: @clock,
-                            output: @output,
-                            scoped_properties: @scoped_properties,
-                            event_type: event_type)
-    end
   end
 
   def method_missing(event)
@@ -44,6 +34,24 @@ class MicroserviceLogger
                            clock: @clock,
                            output: @output,
                            scoped_properties: scoped_properties)
+  end
+
+  private
+
+  def event_loggers
+    @event_loggers ||= Hash[
+      @events.map do |method_name|
+        [method_name, json_event_logger(method_name.to_s)]
+      end
+    ]
+  end
+
+  def json_event_logger(event_type)
+    JsonEventLogger.new(service_name: @service_name,
+                        clock: @clock,
+                        output: @output,
+                        scoped_properties: @scoped_properties,
+                        event_type: event_type)
   end
 
   # The fields 'event_type' and 'serverity' in the JSON output that is logged
