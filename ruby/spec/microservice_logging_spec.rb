@@ -152,8 +152,7 @@ RSpec.describe MicroserviceLogger do
       contents = JSON.parse(output.string)
       expect(contents).to include('error' => 'ZeroDivisionError')
       expect(contents['stacktrace']).to be_a(Array)
-      expect(contents['stacktrace'][0])
-        .to start_with('/var/app/spec/microservice_logging_spec')
+      expect(contents['stacktrace'][0]).to start_with(__FILE__)
     end
   end
 end
