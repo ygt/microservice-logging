@@ -9,5 +9,5 @@ Gem::Specification.new do |s|
   s.files       = ['lib/microservice_logging.rb', 'lib/json_event_logger.rb']
   s.homepage    =
     'https://github.com/ygt/microservice-logging/'
-  s.license       = 'MIT'
+  s.license = 'MIT'
 end

@@ -19,11 +19,11 @@ class MicroserviceLogger
     @events.each do |method_name|
       event_type = method_name.to_s
       @event_loggers[method_name] =
-        JsonEventLogger.new(:service_name => @service_name,
-                            :clock => @clock,
-                            :output => @output,
-                            :scoped_properties => @scoped_properties,
-                            :event_type => event_type)
+        JsonEventLogger.new(service_name: @service_name,
+                            clock: @clock,
+                            output: @output,
+                            scoped_properties: @scoped_properties,
+                            event_type: event_type)
     end
   end
 
@@ -40,10 +40,10 @@ class MicroserviceLogger
   ].freeze
 
   def with(scoped_properties)
-    MicroserviceLogger.new(:service_name => @service_name,
-                           :clock => @clock,
-                           :output => @output,
-                           :scoped_properties => scoped_properties)
+    MicroserviceLogger.new(service_name: @service_name,
+                           clock: @clock,
+                           output: @output,
+                           scoped_properties: scoped_properties)
   end
 
   # The fields 'event_type' and 'serverity' in the JSON output that is logged
