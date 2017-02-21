@@ -6,9 +6,11 @@ RSpec.describe MicroserviceLogger do
   let(:a_time) { Time.now }
   let(:clock) { class_double(Time) }
   let(:output) { StringIO.new }
-  subject { MicroserviceLogger.new(:service_name => 'rainbow-dash',
-                                   :clock => clock,
-                                   :output => output )}
+  subject do
+    MicroserviceLogger.new(service_name: 'rainbow-dash',
+                           clock: clock,
+                           output: output)
+  end
 
   before do
     allow(clock).to receive(:now).and_return(a_time)
@@ -150,8 +152,7 @@ RSpec.describe MicroserviceLogger do
       contents = JSON.parse(output.string)
       expect(contents).to include('error' => 'ZeroDivisionError')
       expect(contents['stacktrace']).to be_a(Array)
-      expect(contents['stacktrace'][0])
-        .to start_with('/var/app/spec/microservice_logging_spec')
+      expect(contents['stacktrace'][0]).to start_with(__FILE__)
     end
   end
 end

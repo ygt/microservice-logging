@@ -1,5 +1,6 @@
 # A machine-readable first, human-readable second logging library
 class MicroserviceLogger
+  # The actual class that does the logging
   class JsonEventLogger
     def initialize(service_name:,
                    clock:,
